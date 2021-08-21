@@ -1,0 +1,15 @@
+[package]
+name = "model"
+version = "0.1.0"
+authors = ["Andrea Foresti <andrea@foresti.ch>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+serde = { version = "*", features = ["derive"] }
+math = { path="../math" }
+curve = { path="../curve" }
+data-cube = { path="../data-cube" }
+macros = { path="../macros" }

@@ -1,0 +1,1 @@
+.\target\debug\monaco.exe "./monaco-data/config" > "./monaco-data/output/monaco.log"

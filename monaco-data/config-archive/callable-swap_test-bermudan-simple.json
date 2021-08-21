@@ -1,0 +1,30 @@
+{
+	"name"							:	"test-berumdan-simple",
+	"exposure_discount_model_name"	:	"hw1f_usd",
+	"call_dates"					:	[0.5,1.0,1.5],
+	"underlying"					:	{
+											"name"	:	"test-callable-swap-underlying",
+											"legs"	:	[
+															{
+																"notional"		:	1.0,
+																"pay_or_receive"	:	"pay",
+																"discount_model_name"	:	"hw1f_usd",
+																"projection_model_name"	:	"hw1f_usd",
+																"fx_model_name"			:	"fixed_usd",
+																"payment_dates"			:	[0.5,1.0,1.5,2],
+																"is_fixed"				:	true,
+																"fixed_values"			:	[0.01,0.01,0.01,0.01]
+															},
+															{
+																"notional"		:	1.0,
+																"pay_or_receive"	:	"receive",
+																"discount_model_name"	:	"hw1f_usd",
+																"projection_model_name"	:	"hw1f_usd",
+																"fx_model_name"			:	"fixed_usd",
+																"payment_dates"			:	[0.25,0.5,0.75,1.0,1.25,1.5,1.75,2.0],
+																"is_fixed"				:	false,
+																"fixed_values"			:	[0.012,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+															}
+														]
+										}
+}

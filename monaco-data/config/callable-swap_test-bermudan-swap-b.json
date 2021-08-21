@@ -1,0 +1,30 @@
+{
+	"name"							:	"test-bermudan-swap-b",
+	"exposure_discount_model_name"	:	"hw1f_usd",
+	"call_dates"					:	[0.142465753,0.394520548,0.64109589,0.890410959,1.139726027,1.391780822],
+	"underlying"					:	{
+											"name"	:	"test-bermudan-swap-b-underlying",
+											"legs"	:	[
+															{
+																"notional"		        :	2000000,
+																"pay_or_receive"	    :	"pay",
+																"discount_model_name"	:	"hw1f_usd",
+																"projection_model_name"	:	"hw1f_usd",
+																"fx_model_name"		    :	"fixed_usd",
+																"payment_dates"		    :	[0.136986301369863,0.635616438356164,1.13698630136986,1.63561643835616],
+																"is_fixed"		        :	true,
+																"fixed_values"  		:	[0.010027397,0.009972603,0.010027397,0.009972603]
+															},
+															{
+																"notional"		        :	2000000,
+																"pay_or_receive"	    :	"receive",
+																"discount_model_name"	:	"hw1f_usd",
+																"projection_model_name"	:	"hw1f_usd",
+																"fx_model_name"		    :	"fixed_usd",
+																"payment_dates"		    :	[0.136986301369863,0.389041095890411,0.635616438356164,0.884931506849315,1.13698630136986,1.38904109589041,1.63561643835616],
+																"is_fixed"		        :	false,
+																"fixed_values"		    :	[0.009,0.009,0.009,0.009,0.009,0.009,0.009]
+															}
+														]
+										}
+}

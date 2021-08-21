@@ -1,0 +1,17 @@
+[package]
+name = "instrument"
+version = "0.1.0"
+authors = ["Andrea Foresti <andrea@foresti.ch>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+logger = { path="../logger" }
+serde = { version = "*", features = ["derive"] }
+data-cube = { path="../data-cube" }
+model = { path="../model" }
+curve = { path="../curve" }
+math = { path="../math" }
+macros = { path="../macros" }

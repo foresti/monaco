@@ -1,0 +1,25 @@
+{
+	"name"	:	"test-bermudan-swap-free-underlying",
+	"legs"	:	[
+					{
+						"notional"		:	2000000,
+						"pay_or_receive"	:	"pay",
+						"discount_model_name"	:	"hw1f_usd",
+						"projection_model_name"	:	"hw1f_usd",
+						"fx_model_name"		:	"fixed_usd",
+						"payment_dates"		:	[0.136986301369863,0.635616438356164,1.13698630136986,1.63561643835616],
+						"is_fixed"		:	true,
+						"fixed_values"		:	[0.010027397,0.009972603,0.010027397,0.009972603]
+					},
+					{
+						"notional"		:	2000000,
+						"pay_or_receive"	:	"receive",
+						"discount_model_name"	:	"hw1f_usd",
+						"projection_model_name"	:	"hw1f_usd",
+						"fx_model_name"		:	"fixed_usd",
+						"payment_dates"		:	[0.136986301369863,0.389041095890411,0.635616438356164,0.884931506849315,1.13698630136986,1.38904109589041,1.63561643835616],
+						"is_fixed"		:	false,
+						"fixed_values"		:	[0.002458,0.002334,0.0023,0.00232,0.00233,0.00233,0.0023]
+					}
+				]
+}
