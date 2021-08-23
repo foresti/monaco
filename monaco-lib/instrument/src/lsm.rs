@@ -133,12 +133,6 @@ pub fn compute_lsm_values   (
             let y_str=math::matrix::display_matrix(&itm_next_values,itm_next_values.len(),1,false);
             logger.log(format!("lsm|regression -> date: {} - x: {} - y: {}",dt,x_str,y_str),"lsm");
             let regressor=LinearRegressor::create_regressor(&regression_variables,&itm_next_values);
-
-            let mut itm_variable_values_squared:Vec<f64>=vec![0.0;itm_variable_values.len()];
-            for i in 0..itm_variable_values.len()
-            {
-                itm_variable_values_squared[i]=itm_variable_values[i]*itm_variable_values[i];
-            }
             
             //Pricing regressor
             let mut variable_values_squared:Vec<f64>=vec![0.0;variable_values.len()];
