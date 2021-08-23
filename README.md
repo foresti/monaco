@@ -118,6 +118,14 @@ The dates are in *ascending* order.
 
 This data structure is, for instance, used to store simulated random variates, model outputs and simulated exposures.
 
+# Conventions
+
+Here are the main conventions used in the application:
+
+- dates are expressed as year fractions (the chrono dependency is used only to decorate log entries)
+- the date of the analysis is t=0
+- the value of an instrument is zero on the maturity date. More in general, cashflows at time *t* are **not** part of the instrument's value at time *t*
+
 # Models
 
 ## Hull-White one factor
@@ -155,6 +163,42 @@ It features no variables and no outputs, therefore no time series associated to 
 |---|---|---|---|
 |name|String|Model name|"fx_usd"|
 |value|Number|Fixed value|1.0|
+
+# The LSM algorithm
+
+The 'instrument' module houses all the different financial instrument specifications. New instrument type are added here.
+The 'instrument' trait requires the implementation of only two methods:
+
+- 'get_name', which returns the name of the concrete isntrument position (usually just echoing a backing field)
+- 'compute_values' which populates the appropriate section of the exposures data cube and returns a cashflows structure and a binary data cube containing exercise events
+
+There are, by design, no constraints as to how to perform the calculation in 'compute_values'. However, the 'lsm' module has been implemented to simplify and standardise the calculations for derivatives using the Longstaff-Schwartz Monte Carlo method.
+
+The 'compute_lsm_values' function requires the following arguments:
+
+|Signature|Description|
+|---|---|
+|instrument_values_cube:&mut Cube|Data cube with one series, the number of scenarios specified and the required evaluation dates|
+|live_models:&HashMap&lt;String,LiveModel&gt;|The universe of live models|
+|exercise_flags:&Vec&lt;bool&gt;|A vector with same dimension as the dates in the instrument_values_cube the indicates whether exercise is possible on that date|
+|f_models_variables_values:&mut impl FnMut(f64,&HashMap&lt;String,LiveModel&gt;) -> Vec&lt;f64&gt;|Function that returns model variable values|
+|f_exercise_value:&mut impl FnMut(usize,f64,&HashMap&lt;String,LiveModel&gt;) -> f64|A function used to compute the exercise value of the instrument|
+|f_cashflows:&mut impl FnMut(usize,f64,f64,&HashMap&lt;String,LiveModel&gt;) -> Vec&lt;(f64,f64)&gt;|Function that computes the cashflows along a path between two dates|
+|discount_model:&LiveModel|Model to use to move cashflow and exposure values in time|
+|logger:&Logger|Logger object (normally the one passed to 'compute_values')|
+
+It populates the instrument values cube and outputs a list cashflow vectors and an exercise cube. 
+
+> The list of dates for which to perform the calculation is the union of the simulation dates, the instrument payment dates, the exercise dates, and the maturity date.
+
+The algorithm for the lsm function performs a backward calculation on the vector of dates that is passed in the 'intrument_values_cube'.
+The value of the instrument is zero at maturity.
+For every earlier date:
+
+- if it is not an exercise date the value is given by the regression over all previous cashflows for all scenarios
+- if it is an exercise date, the instrument value is given by the bigger of the exercise value (given by 'f_exercise_value') and the regression value *calculated over the in-the-money paths*. 
+
+> The cashflows structure returned by 'compute_values' and 'compute_lsm_values' (Vec&lt;Vec&lt;(f64,f64)&gt;&gt;) is a vector of dimension S (number of scenarios) whose entries contain the ordered cashflows for that scenario. Every cashflow is a (t,v) tuple where t is the time of the cashflow (expresed as a year fraction) and v is the value of the cashflow *at time t* (i.e. the cashflows are not discounted).
 
 # Instruments
 
