@@ -1,2 +1,2 @@
 Git placeholder file.
-This folder is normally empty and used to store the result files.
+This folder is normally empty and used to store result files.
