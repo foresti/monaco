@@ -96,11 +96,12 @@ pub fn compute_paths(models:&Vec<Box<dyn Model>>,time_steps:&Vec<f64>,num_paths:
     return (paths,raw_cube);
 }
 
-pub fn create_live_models<'a>(models:&'a Vec<Box<dyn Model>>,paths:&'a Cube,logger:&Logger) -> HashMap<String,LiveModel<'a>>
+pub fn create_live_models<'a>(models:&'a Vec<Box<dyn Model>>,paths:&'a Cube,raw_cube:&'a Cube,logger:&Logger) -> HashMap<String,LiveModel<'a>>
 {
     logger.log("Creating live models...","controller");
     let mut live_models:HashMap<String,LiveModel>=HashMap::new();
     let mut start:usize=0;
+    let mut raw_start:usize=0;
     for i in 0..models.len()
     {
         let live_model=LiveModel
@@ -108,10 +109,13 @@ pub fn create_live_models<'a>(models:&'a Vec<Box<dyn Model>>,paths:&'a Cube,logg
             //name: models[i].get_name(),
             cube: &paths,
             start: start,
+            raw_start: raw_start,
+            raw_cube: &raw_cube,
             model: &models[i]
         };
         live_models.insert(models[i].get_name(),live_model);
         start+=models[i].get_number_of_outputs();
+        raw_start+=models[i].get_number_of_variables();
     }
     
     return live_models;

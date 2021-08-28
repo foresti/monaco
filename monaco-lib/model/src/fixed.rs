@@ -21,7 +21,12 @@ impl Model for Fixed
     fn get_number_of_outputs(&self) -> usize {return 0;}
 
     fn populate_factors(&self,_start_raw: usize,_raw_factors:&Cube,_start:usize,_factors:&mut Cube) -> () {}
-    fn get_value(&self,_start_pos:usize,_cube:&Cube,_scenario:usize,_date:f64, _term:f64) -> Result<f64,String>
+    
+    fn get_output_values(&self,_start_pos:usize,_cube:&Cube,_raw_start_pos:usize,_raw_cube:&Cube,_scenario:usize,_date:f64) -> Result<Vec<f64>,String>
+    {
+        return Ok(vec![self.value]);
+    }
+    fn get_value(&self,_start_pos:usize,_cube:&Cube,_raw_start_pos:usize,_raw_cube:&Cube,_scenario:usize,_date:f64, _term:f64) -> Result<f64,String>
     {
         return Ok(self.value);
     }

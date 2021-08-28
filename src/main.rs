@@ -133,7 +133,7 @@ fn main() {
     }
 
     let (paths,raw_cube)=controller::compute_paths(&models, &parameters.time_steps, parameters.num_paths, &correlation_matrix,&logger);
-    let live_models=controller::create_live_models(&models, &paths, &logger);
+    let live_models=controller::create_live_models(&models, &paths, &raw_cube, &logger);
 
     println!("Reading instruments...");
     let mut instruments=read_instruments(&args[1],&logger);

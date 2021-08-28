@@ -156,11 +156,21 @@ impl Model for Hw1f
             }
         }
     }
-    fn get_value(&self,start_pos:usize, cube:&Cube, scenario:usize, date:f64, term:f64) -> Result<f64,String>
+    fn get_output_values(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64) -> Result<Vec<f64>,String>
     {
+        //TODO: Martingale interpolation
         let res=cube.get_item_interp(scenario,start_pos,date,true);
         let r:f64=match res {
             Ok(r)     =>   r.2,
+            Err(e)    =>   { return Err(format!("Hw1f - {}{}","Error: ",&e)) },
+        };
+        return Ok(vec![r]);
+    }
+    fn get_value(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64, term:f64) -> Result<f64,String>
+    {
+        let res=self.get_output_values(start_pos,cube,raw_start_pos,raw_cube,scenario,date);
+        let r:f64=match res {
+            Ok(r)     =>   r[0],
             Err(e)    =>   { return Err(format!("Hw1f - {}{}","Error: ",&e)) },
         };
         let v1=self.A(date,date+term);
