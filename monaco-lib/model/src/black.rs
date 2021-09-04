@@ -64,16 +64,71 @@ impl Model for Black
             }
         }
     }
+    #[allow(non_snake_case)]
     fn get_output_values(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64) -> Result<Vec<f64>,String>
     {
-        //TODO: Martingale interpolation
-        let res=cube.get_item_interp(scenario,start_pos,date,true);
-        let r:f64=match res {
-            Ok(r)     =>   r.2,
-            Err(e)    =>   { return Err(format!("Hw1f - {}{}","Error: ",&e)) },
+        //Martingale interpolation
+        let prev_v_res=cube.get_item_last(scenario,start_pos,date);
+        let (prev_dt_idx,prev_v)=match prev_v_res
+        {
+            Ok((p,q)) => (p,q),
+            Err(e) => return Err(format!("Black - {}{}","Error: ",&e)),
         };
-        return Ok(vec![r]);
+        let prev_dt_res=cube.get_date(prev_dt_idx);
+        let prev_dt=match prev_dt_res
+        {
+            Ok(v) => v,
+            Err(e) => return Err(format!("Black - {}{}","Error: ",&e)),
+        };
+        let next_dt_idx=prev_dt_idx+1;
+        let next_dt_res=cube.get_date(next_dt_idx);
+        let next_dt=match next_dt_res
+        {
+            Ok(v) => v,
+            Err(e) => return Err(format!("Hw1f - {}{}","Error: ",&e)),
+        };
+
+        let (prev_X_pos,_prev_X)=match raw_cube.get_item_last(scenario,raw_start_pos,date)
+        {
+            Ok((p,q)) => (p,q),
+            Err(e) => return Err(format!("Black - {}{}","Error: ",&e)),
+        };
+        let next_X=match raw_cube.get_item(scenario,raw_start_pos,prev_X_pos+1)
+        {
+            Ok(v) => v,
+            Err(e) =>  return Err(format!("Black - {}{}","Error: ",&e)),
+        };
+        let prev_sigma=math::math::interpolate(&self.sigmas, prev_dt);
+
+        let delta_t=date-prev_dt;
+
+        let b_wgt:f64=((date-prev_dt)/(next_dt-prev_dt)).sqrt();
+
+        //Sigma is defined at the beginning of each time step
+        let D=prev_v*(prev_sigma*(delta_t)*((b_wgt*next_X)-0.5*(prev_sigma*prev_sigma*(delta_t)))).exp();
+
+        let v:f64=prev_v*(self.r*delta_t)+D;
+        //logger.log(format!("Black|get_output_values (martingale) -> [s:{}|p:{}|d:{}]: prev_v:{}|next_X:{}|sigma:{}|delta_t:{}|b_wgt:{}|v:{}",scenario,start_pos,date,prev_v,next_X,prev_sigma,delta_t,b_wgt,v),"model");
+        return Ok(vec![v]);
+        //Old: Direct interpolation
+        // let res=cube.get_item_interp(scenario,start_pos,date,true);
+        // let r:f64=match res {
+        //     Ok(r)     =>   r.2,
+        //     Err(e)    =>   { return Err(format!("Black - {}{}","Error: ",&e)) },
+        // };
+        // logger.log(format!("Black|get_output_values (direct) -> [s:{}|p:{}|d:{}]: {}",scenario,start_pos,date,r),"model");
+        // //return Ok(vec![r]);
     }
+    // fn get_output_values(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64) -> Result<Vec<f64>,String>
+    // {
+    //     //TODO: Martingale interpolation
+    //     let res=cube.get_item_interp(scenario,start_pos,date,true);
+    //     let r:f64=match res {
+    //         Ok(r)     =>   r.2,
+    //         Err(e)    =>   { return Err(format!("Hw1f - {}{}","Error: ",&e)) },
+    //     };
+    //     return Ok(vec![r]);
+    // }
     fn get_value(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64, _term:f64) -> Result<f64,String>
     {
         let res=self.get_output_values(start_pos,cube,raw_start_pos,raw_cube,scenario,date);
