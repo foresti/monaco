@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 
+logger = { path="../logger" }
 serde = { version = "*", features = ["derive"] }
 math = { path="../math" }
 curve = { path="../curve" }

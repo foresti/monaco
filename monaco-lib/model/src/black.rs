@@ -3,6 +3,7 @@ use crate::model::Model;
 use data_cube::data_cube::Cube;
 use serde::{Serialize, Deserialize};
 use macros::debug;
+use logger::Logger;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Black
@@ -36,7 +37,7 @@ impl Model for Black
     }
 
     #[allow(non_snake_case)]
-    fn populate_factors(&self,start_raw: usize, raw_factors:&Cube, start:usize, factors:&mut Cube) -> ()
+    fn populate_factors(&self,start_raw: usize, raw_factors:&Cube, start:usize, factors:&mut Cube,logger:&Logger) -> ()
     {
         for s in 0..factors.num_scenarios
         {
@@ -65,7 +66,7 @@ impl Model for Black
         }
     }
     #[allow(non_snake_case)]
-    fn get_output_values(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64) -> Result<Vec<f64>,String>
+    fn get_output_values(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64,logger:&Logger) -> Result<Vec<f64>,String>
     {
         //Martingale interpolation
         let prev_v_res=cube.get_item_last(scenario,start_pos,date);
@@ -129,9 +130,9 @@ impl Model for Black
     //     };
     //     return Ok(vec![r]);
     // }
-    fn get_value(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64, _term:f64) -> Result<f64,String>
+    fn get_value(&self,start_pos:usize, cube:&Cube, raw_start_pos:usize, raw_cube:&Cube, scenario:usize, date:f64, _term:f64,logger:&Logger) -> Result<f64,String>
     {
-        let res=self.get_output_values(start_pos,cube,raw_start_pos,raw_cube,scenario,date);
+        let res=self.get_output_values(start_pos,cube,raw_start_pos,raw_cube,scenario,date,&logger);
         let v:f64=match res {
             Ok(v)     =>   v[0],
             Err(e)    =>   { return Err(format!("Black - {}{}","Error: ",&e)) },

@@ -90,14 +90,14 @@ pub fn compute_lsm_values   (
                 //logger.log(format!("lsm -> next_dt_idx: {}, next_dt: {}, dt_idx: {}, dt: {}",next_dt_idx,next_dt,dt_idx,dt),"lsm");
 
                 let mut v=instrument_values_cube.get_item(s, 0, next_dt_idx).unwrap();
-                let r=discount_model.get_value(s, dt, next_dt-dt).unwrap();
+                let r=discount_model.get_value(s, dt, next_dt-dt,&logger).unwrap();
                 v=v*(-r*(next_dt-dt)).exp();
                 next_values[s]=v;
 
                 let cashflows=f_cashflows(s,dt,next_dt,&live_models);
                 for c in 0..cashflows.len()
                 {
-                    let r=discount_model.get_value(s, dt, cashflows[c].0-dt).unwrap();
+                    let r=discount_model.get_value(s, dt, cashflows[c].0-dt,&logger).unwrap();
                     let df=(-r*(cashflows[c].0-dt)).exp();
                     next_values[s]+=cashflows[c].1*df;
                 }

@@ -66,7 +66,7 @@ pub fn create_data_cube_from_raw(models:&Vec<Box<dyn Model>>,raw_factors:&Cube, 
         logger.log(format!("Data cube from raw - raw_cube: {0}",raw_factors.get_len()).as_str(),"controller");
         logger.log(format!("Data cube from raw - ret_cube: {0}",ret_cube.get_len()).as_str(),"controller");
 
-        models[i].populate_factors(num_of_variables, &raw_factors, num_of_outputs, &mut ret_cube);
+        models[i].populate_factors(num_of_variables, &raw_factors, num_of_outputs, &mut ret_cube,&logger);
         num_of_outputs+=models[i].get_number_of_outputs();
         num_of_variables+=models[i].get_number_of_variables();
     }

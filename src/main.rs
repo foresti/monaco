@@ -293,7 +293,7 @@ fn main() {
                     for j in 0..parameters.model_values_terms.len()
                     {
                         //println!("{}-{}-{}",s,dt_idx,paths.dates[dt_idx]);
-                        let v:f64=live_models[key].get_value(s, paths.dates[dt_idx], parameters.model_values_terms[j]).unwrap();
+                        let v:f64=live_models[key].get_value(s, paths.dates[dt_idx], parameters.model_values_terms[j],&logger).unwrap();
                         let f:f64=live_models[key].cube.get_item_interp(s, live_models[key].start, paths.dates[dt_idx], true).unwrap().2;
                         //logger.log(format!("Model value: {} (factor: {}) - model: {} - scenario: {} - series: {} - date index: {} - date: {} - term: {}",v,f,live_models[key].model.get_name(),s,live_models[key].start, dt_idx,paths.dates[dt_idx], parameters.model_values_terms[j]),"app");
                         let _=model_values.set_item(s,i*parameters.model_values_terms.len()+j,dt_idx,v);

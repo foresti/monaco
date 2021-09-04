@@ -2,6 +2,7 @@ use std::any::Any;
 use crate::model::Model;
 use data_cube::data_cube::Cube;
 use serde::{Serialize, Deserialize};
+use logger::Logger;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Fixed
@@ -20,13 +21,13 @@ impl Model for Fixed
     fn get_number_of_variables(&self) -> usize{return 0;}
     fn get_number_of_outputs(&self) -> usize {return 0;}
 
-    fn populate_factors(&self,_start_raw: usize,_raw_factors:&Cube,_start:usize,_factors:&mut Cube) -> () {}
+    fn populate_factors(&self,_start_raw: usize,_raw_factors:&Cube,_start:usize,_factors:&mut Cube,logger:&Logger) -> () {}
     
-    fn get_output_values(&self,_start_pos:usize,_cube:&Cube,_raw_start_pos:usize,_raw_cube:&Cube,_scenario:usize,_date:f64) -> Result<Vec<f64>,String>
+    fn get_output_values(&self,_start_pos:usize,_cube:&Cube,_raw_start_pos:usize,_raw_cube:&Cube,_scenario:usize,_date:f64,logger:&Logger) -> Result<Vec<f64>,String>
     {
         return Ok(vec![self.value]);
     }
-    fn get_value(&self,_start_pos:usize,_cube:&Cube,_raw_start_pos:usize,_raw_cube:&Cube,_scenario:usize,_date:f64, _term:f64) -> Result<f64,String>
+    fn get_value(&self,_start_pos:usize,_cube:&Cube,_raw_start_pos:usize,_raw_cube:&Cube,_scenario:usize,_date:f64, _term:f64,logger:&Logger) -> Result<f64,String>
     {
         return Ok(self.value);
     }

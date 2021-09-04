@@ -95,10 +95,10 @@ impl Instrument for CallableSwap
             &mut instrument_values_cube,
             &live_models,
             &exercise_flags,
-            &mut |date, live_models| self.underlying.get_models_variables_values(date, &live_models),
-            &mut |scenario,date,live_models| -self.underlying.get_value(scenario,date,&live_models),
+            &mut |date, live_models| self.underlying.get_models_variables_values(date, &live_models,&logger),
+            &mut |scenario,date,live_models| -self.underlying.get_value(scenario,date,&live_models,&logger),
             // &mut |scenario,min_date,max_date,live_models| {let mut cf=self.underlying.get_cashflows(scenario,min_date,max_date,&live_models); for i in 0..cf.len() {cf[i].1=-cf[i].1} return cf },
-            &mut |scenario,min_date,max_date,live_models| self.underlying.get_cashflows(scenario,min_date,max_date,&live_models).iter().map(|cf| (cf.0,-cf.1)).collect(),
+            &mut |scenario,min_date,max_date,live_models| self.underlying.get_cashflows(scenario,min_date,max_date,&live_models,&logger).iter().map(|cf| (cf.0,-cf.1)).collect(),
             &exp_dsc_model,
             &logger
         );
