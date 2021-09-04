@@ -58,7 +58,7 @@ impl Model for Black
                     let prev:f64=if dt_idx==0 { self.initial_value } else { factors.get_item(s, start, dt_idx-1).unwrap() };
                     let v:f64=prev+prev*(self.r*delta_t+sigma*dW*f64::sqrt(delta_t));
 
-                    //debug!(format!("black-Populate factors -> name: {0}, s: {1}, dt_idx: {2}, delta_t: {3}, sigma:{4}, dW: {5}, prev: {6}, v: {7}, r: {8}",self.name,s,dt_idx,delta_t,sigma,dW,prev,v,self.r));
+                    logger.log(format!("black|populate_factors -> name: {0}, s: {1}, dt_idx: {2}, delta_t: {3}, sigma:{4}, dW: {5}, prev: {6}, v: {7}, r: {8}",self.name,s,dt_idx,delta_t,sigma,dW,prev,v,self.r),"model");
 
                     factors.set_item(s, start, dt_idx, v).unwrap();
                 }
@@ -109,7 +109,7 @@ impl Model for Black
         let D=prev_v*(prev_sigma*(delta_t)*((b_wgt*next_X)-0.5*(prev_sigma*prev_sigma*(delta_t)))).exp();
 
         let v:f64=prev_v*(self.r*delta_t)+D;
-        //logger.log(format!("Black|get_output_values (martingale) -> [s:{}|p:{}|d:{}]: prev_v:{}|next_X:{}|sigma:{}|delta_t:{}|b_wgt:{}|v:{}",scenario,start_pos,date,prev_v,next_X,prev_sigma,delta_t,b_wgt,v),"model");
+        logger.log(format!("Black|get_output_values (martingale) -> [s:{}|p:{}|d:{}]: prev_v:{}|next_X:{}|sigma:{}|delta_t:{}|b_wgt:{}|v:{}",scenario,start_pos,date,prev_v,next_X,prev_sigma,delta_t,b_wgt,v),"model");
         return Ok(vec![v]);
         //Old: Direct interpolation
         // let res=cube.get_item_interp(scenario,start_pos,date,true);

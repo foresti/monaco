@@ -151,7 +151,7 @@ impl Model for Hw1f
                     let r2:f64=-math::math::interpolate(&self.a, t)*prev_r*delta_t;
                     let r3:f64=math::math::interpolate(&self.sigmas, t)*f64::sqrt(delta_t)*raw_factors.get_item(s, start_raw, dt_idx).unwrap();
                     let r=prev_r+r1+r2+r3;
-                    //debug!(format!("hw1f|Populate factors -> name: {0}, s: {1}, dt_idx: {2}, delat_t: {3}, phi_t: {4}, r1: {5}, r2: {6}, r3: {7}, r: {8}, prev_r: {9}",self.name,s,dt_idx,delta_t,phi_t,r1,r2,r3,r,prev_r));
+                    logger.log(format!("hw1f|populate_factors -> name: {0}, s: {1}, dt_idx: {2}, delat_t: {3}, phi_t: {4}, r1: {5}, r2: {6}, r3: {7}, r: {8}, prev_r: {9}",self.name,s,dt_idx,delta_t,phi_t,r1,r2,r3,r,prev_r),"model");
                     factors.set_item(s, start, dt_idx, r).unwrap();
                 }
             }
@@ -208,7 +208,7 @@ impl Model for Hw1f
 
         let r=prev_r+r1+r2+r3;
 
-        //logger.log(format!("Hw1f|get_output_values (martingale) -> [s:{}|p:{}|d:{}] prev_v:{}|next_X:{}|sigma:{}|delta_t:{}|b_wgt:{}|v:{}",scenario,start_pos,date,prev_r,next_X,prev_sigma,delta_t,b_wgt,r),"model");
+        logger.log(format!("Hw1f|get_output_values (martingale) -> [s:{}|p:{}|d:{}] prev_v:{}|next_X:{}|sigma:{}|delta_t:{}|b_wgt:{}|v:{}",scenario,start_pos,date,prev_r,next_X,prev_sigma,delta_t,b_wgt,r),"model");
         return Ok(vec![r]);
 
         //OLD: Direct interpolation
@@ -240,7 +240,7 @@ impl Model for Hw1f
         let v1=self.A(date,date+term);
         let v2=-r*self.B(date,date+term);
         let p=v1*v2.exp();
-        //debug!(format!("h1wf|get_value -> name: {}, r: {}, v1: {}, v2: {}, v2exp: {}, p: {}, -p.ln: {}, date: {}, term:{}",self.name,r,v1,v2,v2.exp(),p,-p.ln(),date,term));
+        logger.log(format!("h1wf|get_value -> name: {}, r: {}, v1: {}, v2: {}, v2exp: {}, p: {}, -p.ln: {}, date: {}, term:{}",self.name,r,v1,v2,v2.exp(),p,-p.ln(),date,term),"model");
         let r=-p.ln()/term;
         return Ok(r);
     }
