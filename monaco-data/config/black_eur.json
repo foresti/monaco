@@ -1,5 +1,6 @@
 {
 	"name": "black_eur",
+	"interpolation": "Martingale",
 	"r": 0.0007807,
     "sigmas":	[
 					[0.10411,0.0007807],

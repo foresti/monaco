@@ -1,5 +1,5 @@
 {
-	"log_tags" : ["instrument","lsm"],
+	"log_tags" : ["app"],
 	"num_paths": 1000,
 	"time_steps": [0.0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.25,6.5,6.75,7],
 	"output_file_variables": "./monaco-data/output/variables_cube.json",
@@ -10,7 +10,9 @@
 	"model_output_dir":"./monaco-data/output",
 	"dump_model_values":true,
 	"model_values_terms":[0.25,0.5,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,20.0,25.0,30.0],
-        "output_file_model_values":"./monaco-data/output/model_values_cube.json",
+    "output_file_model_values":"./monaco-data/output/model_values_cube.json",
 	"output_file_cashflows":"./monaco-data/output/cashflows.json",
-	"exercise_output_dir":"./monaco-data/output"
+	"exercise_output_dir":"./monaco-data/output",
+	"recycle_randomness":false,
+	"randomness_file":""
 }

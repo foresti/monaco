@@ -16,5 +16,7 @@ pub struct RunParameters
     pub model_values_terms:Vec<f64>,
     pub output_file_model_values:String,
     pub output_file_cashflows:String,
-    pub exercise_output_dir:String
+    pub exercise_output_dir:String,
+    pub recycle_randomness:bool,
+    pub randomness_file:String
 }

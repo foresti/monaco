@@ -1,4 +1,4 @@
-use macros::debug;
+//use macros::debug;
 use data_cube::data_cube::Cube;
 use crate::model::Model;
 use logger::Logger;
@@ -34,7 +34,7 @@ impl LiveModel<'_>
 {
     pub fn get_variable_values(&self,scenario:usize, date:f64,logger:&Logger) -> Vec<f64>
     {
-        let num_var:usize=self.model.get_number_of_outputs();
+        //let num_var:usize=self.model.get_number_of_outputs();
         //debug!(format!("LiveModel|get_variable_values -> name: {}, scenario: {}, date: {}, num_var: {}, self.start: {}",self.model.get_name(),scenario,date,num_var,self.start));
         // let mut values:Vec<f64>=vec![0.0;num_var];
         // for i in 0..num_var

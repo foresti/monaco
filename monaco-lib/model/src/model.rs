@@ -1,6 +1,14 @@
 use data_cube::data_cube::Cube;
 use std::any::Any;
 use logger::Logger;
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Debug)]
+pub enum OutputInterpolation
+{
+    Linear,
+    Martingale
+}
 
 pub trait Model
 {

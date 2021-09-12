@@ -3,7 +3,7 @@ use crate::matrix::*;
 
 //extern crate lapack;
 //use lapack::*;
-use macros::debug;
+//use macros::debug;
 use rand::{thread_rng, Rng};
 use rand::distributions::Open01;
 

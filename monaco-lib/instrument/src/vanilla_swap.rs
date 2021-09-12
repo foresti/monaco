@@ -4,7 +4,7 @@ use model::live_model::LiveModel;
 use data_cube::data_cube::Cube;
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
-use macros::debug;
+//use macros::debug;
 use logger::Logger;
 
 #[derive(Serialize, Deserialize)]
@@ -54,9 +54,11 @@ impl VanillaSwap
             {
                 num_scenarios=v.cube.num_scenarios;
             }
+            logger.log(format!("vanilla-swap|get_models_variables_values -> model: {}, number of variables: {}",v.model.get_name(),v.model.get_number_of_variables()),"instrument");
             num_variables+=v.model.get_number_of_variables();
         }
 
+        logger.log(format!("vanilla-swap|get_models_variables_values -> models count: {}, number of variables: {}",models.len(),num_variables),"instrument");
         let mut variables_values:Vec<f64>=vec![0.0;num_variables*num_scenarios];
 
         for s in 0..num_scenarios
@@ -69,6 +71,7 @@ impl VanillaSwap
                 num_var+=values.len();
             }
         }
+        logger.log(format!("vanilla-swap|get_models_variables_values -> Done"),"instrument");
         return variables_values;
     }
 

@@ -1,9 +1,9 @@
 mod parameters;
 
-use std::any::Any;
+//use std::any::Any;
 use std::{env, fs};
-use std::ffi::OsStr;
-use serde::{Serialize, Deserialize};
+//use std::ffi::OsStr;
+//use serde::{Serialize, Deserialize};
 
 use parameters::RunParameters;
 
@@ -34,10 +34,10 @@ fn read_instruments(dir_name:&str,logger:&Logger) -> Vec<Box<dyn Instrument>>
             match x[0]
             {
                 "vanilla-swap"  =>  {
-                                        println!("Reading vanilla swap...");
+                                        //println!("Reading vanilla swap...");
                                         let deserialized:VanillaSwap=serde_json::from_str(&contents).unwrap();
                                         instruments.push(Box::new(deserialized));
-                                        println!("Vanilla swap created.");
+                                        //println!("Vanilla swap created.");
                                     },
                 "callable-swap"  =>  {
                                         let deserialized:CallableSwap=serde_json::from_str(&contents).unwrap();
@@ -79,7 +79,9 @@ fn main() {
         model_values_terms:vec![0.0],
         output_file_model_values:String::new(),
         output_file_cashflows:String::new(),
-        exercise_output_dir:String::new()
+        exercise_output_dir:String::new(),
+        recycle_randomness:false,
+        randomness_file:String::new()
     };
 
     let args: Vec<String> = env::args().collect();
@@ -93,8 +95,8 @@ fn main() {
         let contents = fs::read_to_string(&file_entry).expect("Error reading file!");
         match file_name
         {
-            "control.json"    => { println!("Control"); let deserialized:RunParameters=serde_json::from_str(&contents).unwrap(); parameters=deserialized; },
-            "correlations.json"     => { println!("Correlations"); let deserialized:Vec<f64>=serde_json::from_str(&contents).unwrap(); correlation_matrix=deserialized; },
+            "control.json"    => { logger.log("Reading control file...","app"); let deserialized:RunParameters=serde_json::from_str(&contents).unwrap(); parameters=deserialized; },
+            "correlations.json"     => { logger.log("Reading correlations...","app"); let deserialized:Vec<f64>=serde_json::from_str(&contents).unwrap(); correlation_matrix=deserialized; },
             &_                      => {
                                             if x.len()>1
                                             {
@@ -132,10 +134,20 @@ fn main() {
         models[i].init();
     }
 
-    let (paths,raw_cube)=controller::compute_paths(&models, &parameters.time_steps, parameters.num_paths, &correlation_matrix,&logger);
+    let (paths,raw_cube)=match parameters.recycle_randomness
+    {
+        true  =>    {
+                        let file_contents=fs::read_to_string(parameters.randomness_file).unwrap();
+                        let raw_cube:Cube=serde_json::from_str(&file_contents).unwrap();
+                        let paths:Cube=controller::create_data_cube_from_raw(&models, &raw_cube,&logger);
+                        (raw_cube,paths)
+                    },
+        false =>    controller::compute_paths(&models, &parameters.time_steps, parameters.num_paths, &correlation_matrix,&logger)
+
+    };
     let live_models=controller::create_live_models(&models, &paths, &raw_cube, &logger);
 
-    println!("Reading instruments...");
+    logger.log("Reading instruments...","app");
     let mut instruments=read_instruments(&args[1],&logger);
 
     logger.log(format!("Computing exposures..."),"app");
@@ -294,7 +306,7 @@ fn main() {
                     {
                         //println!("{}-{}-{}",s,dt_idx,paths.dates[dt_idx]);
                         let v:f64=live_models[key].get_value(s, paths.dates[dt_idx], parameters.model_values_terms[j],&logger).unwrap();
-                        let f:f64=live_models[key].cube.get_item_interp(s, live_models[key].start, paths.dates[dt_idx], true).unwrap().2;
+                        //let f:f64=live_models[key].cube.get_item_interp(s, live_models[key].start, paths.dates[dt_idx], true).unwrap().2;
                         //logger.log(format!("Model value: {} (factor: {}) - model: {} - scenario: {} - series: {} - date index: {} - date: {} - term: {}",v,f,live_models[key].model.get_name(),s,live_models[key].start, dt_idx,paths.dates[dt_idx], parameters.model_values_terms[j]),"app");
                         let _=model_values.set_item(s,i*parameters.model_values_terms.len()+j,dt_idx,v);
                     }

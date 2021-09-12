@@ -1,6 +1,7 @@
 {
 	"name": "hw1f_eur",
-    	"term_structure": 	[
+	"interpolation": "Martingale",
+    "term_structure": 	[
 								[0.03,-0.0055615],
 								[0.05,-0.0055792],
 								[0.07,-0.0055914],
