@@ -52,7 +52,7 @@ fn read_instruments(dir_name:&str,logger:&Logger) -> Vec<Box<dyn Instrument>>
 
 const VERSION:&str="0.9";
 fn main() {
-    let mut logger=Logger { log_tags:vec!["app".to_string()] };
+    let mut logger=Logger { log_tags:vec![("app".to_string(),0)] };
     logger.log(format!("Monaco - v{}",VERSION).as_str(),"app");
     
     //let x:Vec<f64>=vec![0.1,0.2,0.3,4.0];
@@ -124,7 +124,7 @@ fn main() {
 
     logger=Logger { log_tags:parameters.log_tags };
 
-    logger.log("Sorting models...","app");
+    logger.log_with_check("Sorting models...","app",0);
     models.sort_by(|a, b| a.get_name().partial_cmp(&b.get_name()).unwrap());
 
     logger.log("Initializing models...","app");

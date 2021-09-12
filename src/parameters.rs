@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RunParameters
 {
-    pub log_tags:Vec<String>,
+    pub log_tags:Vec<(String,usize)>,
     pub num_paths:usize,
     pub time_steps:Vec<f64>,
     pub output_file_variables:String,
