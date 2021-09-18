@@ -1,6 +1,6 @@
 # Monaco
 
-Monaco is a Rust application for Monte Carlo (financial) exposure simulation.
+Monaco is a Rust application for Monte Carlo financial exposure simulation.
 
 The 'monaco' executable relies on logic defined in the 'monaco-lib' library.
 
