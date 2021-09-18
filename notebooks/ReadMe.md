@@ -2,7 +2,7 @@
 
 The notebooks in this folder let us explore the result files of the monaco application.
 
-> To install everything to display the dashboards:
+> To install everything needed to display the dashboards:
 >
 > `pip install numpy scipy pandas scikit-learn`
 >
