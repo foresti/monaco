@@ -1,0 +1,27 @@
+[package]
+name = "monaco-lib"
+version = "0.1.1"
+authors = ["Andrea Foresti <andrea@foresti.ch>"]
+edition = "2018"
+
+[dependencies]
+
+logger = { path = "./logger" }
+model = { path = "./model" }
+instrument = { path = "./instrument" }
+exposure-simulation = { path = "./exposure-simulation" }
+data-cube =  { path = "./data-cube" }
+curve = { path="./curve" }
+
+[workspace]
+
+members = [
+    "logger",
+    "macros",
+    "math",
+    "curve",
+    "data-cube",
+    "model",
+    "instrument",
+    "exposure-simulation"
+]
